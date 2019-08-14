@@ -8,87 +8,27 @@ import javax.swing.*;
 import java.io.*;
 import java.net.*;
 
-public class TicTacToeGUI
+class TicTacToeGUI
 {
-    private final String SERVER_IP    = "127.0.0.1";
-    private final int    SERVER_PORT  = 9999;
-
-    private final String FREE_ICON     = "resources/free.png";
-    private final String PLAYER_ICON   = "resources/green.jpg";
-    private final String COMPUTER_ICON = "resources/yellow.jpg";
 
     private int winCount = 0, lossCount = 0, tieCount = 0;
 
-    private JFrame frame;
-    private Container content;
-    private JPanel buttonPanel, optionsPanel;
-    private JButton[] buttons;
+    private final JFrame frame;
+    private final Container content;
+    private final JPanel buttonPanel;
+    private final JPanel optionsPanel;
+    private final JButton[] buttons;
     
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
 
-    // Handles a click on an enabled grid button.
-    private ActionListener gridClickListener = new ActionListener()
-    {
-        // Transmit the user's desired grid to the server.
-        public void actionPerformed(ActionEvent actionEvent)
-        {
-            String buttonNumber = actionEvent.getActionCommand();
-            System.out.println("Sending to server: " + buttonNumber);
-            out.println(buttonNumber + "\n");
-
-            // Process any commands sent by the server (which should be a gridStatus string).
-            processServerCommands();
-        }
-    };
-
-    // Handles a click on the new game/close game buttons.
-    private ActionListener optionsClickListener = new ActionListener()
-    {
-        public void actionPerformed(ActionEvent actionEvent)
-        {
-            String buttonCommand = actionEvent.getActionCommand();
-
-            // If the user desires to close the game, send the termination
-            // string to the server then close the GUI.
-            if(buttonCommand.equals("close"))
-            {
-                try
-                {
-                    out.println("#CG\n");
-                    out.close();
-                    in.close();
-                    socket.close();
-                }
-                
-                catch(IOException e)
-                {
-                    System.err.println("Error disconnecting from the TTT server.");
-                }
-
-                System.exit(0);
-            }
-            
-            // Otherwise, the user desires a new game.
-            // Send the new game string to the server and refresh the grid of buttons.
-            else
-            {
-                showGrid();
-                out.println("#NG\n");
-                processServerCommands();
-            }
-        }
-    };
-
 
     /**
      * Establish any necessary server connections.
      * Run the game for the user.
-     * @throws InterruptedException
      */
-    public void run() throws InterruptedException
-    {
+    public void run() {
         // Connect to the TicTacToe server.
         connectServer();
 
@@ -108,6 +48,8 @@ public class TicTacToeGUI
     {
         try
         {
+            int SERVER_PORT = 9999;
+            String SERVER_IP = "127.0.0.1";
             socket = new Socket(SERVER_IP, SERVER_PORT);
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -204,10 +146,8 @@ public class TicTacToeGUI
 
     /**
      * Show the user the game's GUI.
-     * @throws InterruptedException
      */
-    private void showGUI() throws InterruptedException
-    {
+    private void showGUI() {
         showGrid();
         frame.setVisible(true);
     }
@@ -266,6 +206,8 @@ public class TicTacToeGUI
             else
             {
                 String icon;
+                String COMPUTER_ICON = "resources/yellow.jpg";
+                String PLAYER_ICON = "resources/green.jpg";
                 if(state == '1') icon = PLAYER_ICON;
                 else icon = COMPUTER_ICON;
 
@@ -292,8 +234,21 @@ public class TicTacToeGUI
         buttons = new JButton[9];
         for(int i = 0; i < buttons.length; i++)
         {
+            String FREE_ICON = "resources/free.png";
             JButton button = new JButton(new ImageIcon(getClass().getResource(FREE_ICON)));
             button.setActionCommand(i + "");
+            // Handles a click on an enabled grid button.
+            // Transmit the user's desired grid to the server.
+            // Process any commands sent by the server (which should be a gridStatus string).
+            // Transmit the user's desired grid to the server.
+            ActionListener gridClickListener = actionEvent -> {
+                String buttonNumber = actionEvent.getActionCommand();
+                System.out.println("Sending to server: " + buttonNumber);
+                out.println(buttonNumber + "\n");
+
+                // Process any commands sent by the server (which should be a gridStatus string).
+                processServerCommands();
+            };
             button.addActionListener(gridClickListener);
 
             buttons[i] = button;
@@ -307,6 +262,37 @@ public class TicTacToeGUI
 
         JButton newGameButton = new JButton("new game");
         newGameButton.setActionCommand("new");
+        // Handles a click on the new game/close game buttons.
+        // If the user desires to close the game, send the termination
+        // string to the server then close the GUI.
+        // Otherwise, the user desires a new game.
+        // Send the new game string to the server and refresh the grid of buttons.
+        ActionListener optionsClickListener = actionEvent -> {
+            String buttonCommand = actionEvent.getActionCommand();
+
+            // If the user desires to close the game, send the termination
+            // string to the server then close the GUI.
+            if (buttonCommand.equals("close")) {
+                try {
+                    out.println("#CG\n");
+                    out.close();
+                    in.close();
+                    socket.close();
+                } catch (IOException e) {
+                    System.err.println("Error disconnecting from the TTT server.");
+                }
+
+                System.exit(0);
+            }
+
+            // Otherwise, the user desires a new game.
+            // Send the new game string to the server and refresh the grid of buttons.
+            else {
+                showGrid();
+                out.println("#NG\n");
+                processServerCommands();
+            }
+        };
         newGameButton.addActionListener(optionsClickListener);
 
         JButton closeGameButton = new JButton("close game");

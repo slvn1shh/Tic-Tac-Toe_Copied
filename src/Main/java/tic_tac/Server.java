@@ -8,12 +8,12 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server
+class Server
 {
     /**
      * The port on which this server will run.
      */
-    static int PORT = 9999;
+    private static final int PORT = 9999;
 
 
     public static void main(String[] args)

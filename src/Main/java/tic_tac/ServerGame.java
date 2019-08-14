@@ -8,12 +8,12 @@ import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-public class ServerGame
+class ServerGame
 {
     private TicTacToe game;
     private Scanner scanner;
-    private BufferedReader input;
-    private DataOutputStream output;
+    private final BufferedReader input;
+    private final DataOutputStream output;
 
 
     /**
@@ -114,7 +114,7 @@ public class ServerGame
 
 
     // / Run through the player's turn.
-    public void doPlayerTurn() throws IOException
+    private void doPlayerTurn() throws IOException
     {
         game.setWhoseTurn(game.getPLAYER_TURN());
 
@@ -152,7 +152,7 @@ public class ServerGame
 
 
     // Run through the computer's turn.
-    public void doComputerTurn() throws CloneNotSupportedException
+    private void doComputerTurn() throws CloneNotSupportedException
     {
         game.setWhoseTurn(game.getCOMPUTER_TURN());
         game.computerMove();

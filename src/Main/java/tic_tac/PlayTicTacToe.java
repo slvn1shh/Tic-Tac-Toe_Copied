@@ -1,7 +1,7 @@
 
 package Main.java.tic_tac;
 
-public class PlayTicTacToe
+class PlayTicTacToe
 {
     public static void main(String...args) throws InterruptedException
     {

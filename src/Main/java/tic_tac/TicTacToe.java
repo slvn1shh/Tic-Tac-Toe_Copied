@@ -18,9 +18,6 @@ public class TicTacToe implements Cloneable
     private final char PLAYER_MARK   = 'X';
     private final char COMPUTER_MARK = 'O';
 
-    // The difficulty of the game.  This value is used by bestGuess().
-    private final int GAME_LEVEL = 8;
-
     /**
      * An integer (using the ..._TURN constants above) describing whose turn it is to make a move.
      */
@@ -101,13 +98,13 @@ public class TicTacToe implements Cloneable
      */
     public String drawBoard()
     {
-        String toReturn = "";
+        StringBuilder toReturn = new StringBuilder();
 
         for(char space : grid)
         {
-            if(space == PLAYER_MARK) toReturn += "1";
-            else if(space == COMPUTER_MARK) toReturn += "2";
-            else toReturn += "-";
+            if(space == PLAYER_MARK) toReturn.append("1");
+            else if(space == COMPUTER_MARK) toReturn.append("2");
+            else toReturn.append("-");
         }
 
         return toReturn + "\n";
@@ -117,7 +114,7 @@ public class TicTacToe implements Cloneable
     /**
      * Returns an array containing a list of all possible moves for this game state.
      */
-    public int[] generateMoves()
+    private void generateMoves()
     {
         // Generate the list of possible moves and store them in moves.
         for(int i = 0; i < moves.length; i++)
@@ -126,13 +123,12 @@ public class TicTacToe implements Cloneable
             moves[i] = (grid[i] == NOBODY_MARK) ? 1 : 0;
         }
 
-        return moves;
     }
 
     /**
      * Returns an array containing a list of all remaining, legal moves for this game state.
      */
-    public int[] generateLegalMoves()
+    private int[] generateLegalMoves()
     {
         // Create the list of legal moves from the move set.
         int[] legalMoves = new int[0];
@@ -146,10 +142,7 @@ public class TicTacToe implements Cloneable
                 int[] tempLegalMoves = legalMoves;
                 legalMoves = new int[tempLegalMoves.length + 1];
 
-                for(int j = 0; j < tempLegalMoves.length; j++)
-                {
-                    legalMoves[j] = tempLegalMoves[j];
-                }
+                System.arraycopy(tempLegalMoves, 0, legalMoves, 0, tempLegalMoves.length);
 
                 legalMoves[legalMoves.length - 1] = i;
             }
@@ -190,26 +183,26 @@ public class TicTacToe implements Cloneable
      * @return int
      * @throws CloneNotSupportedException should the TicTacToe objects not clone successfully.
      */
-    public int bestMove() throws CloneNotSupportedException
+    private int bestMove() throws CloneNotSupportedException
     {
-        /**
-         * Keeps track of the guess value of the best move and the guess value
-         * of the current move being examined.
+        /*
+          Keeps track of the guess value of the best move and the guess value
+          of the current move being examined.
          */
         int bestGuessValue, currentGuessValue;
 
-        /**
-         * Stores the best move found so far and the next move to try.
+        /*
+          Stores the best move found so far and the next move to try.
          */
         int best, tryMove;
 
-        /**
-         * Holds a copy of the current game.
+        /*
+          Holds a copy of the current game.
          */
         TicTacToe tempSituation;
 
-        /**
-         * Stores the set of legal moves for this board state.
+        /*
+          Stores the set of legal moves for this board state.
          */
         int[] legalMoves;
 
@@ -224,6 +217,8 @@ public class TicTacToe implements Cloneable
         tryMove = legalMoves[0];
 
         tempSituation.placePiece(COMPUTER_TURN, tryMove);
+        // The difficulty of the game.  This value is used by bestGuess().
+        int GAME_LEVEL = 8;
         bestGuessValue = tempSituation.bestGuess(GAME_LEVEL);
 
         // Track the best move the computer can make.  For now, it has to be the first legal move.
@@ -273,26 +268,26 @@ public class TicTacToe implements Cloneable
      * level describes how much further the game will play in order to determine the best possible move.
      * Values for level range from 0-8, with 8 being technically unbeatable.
      */
-    public int bestGuess(int level) throws CloneNotSupportedException
+    private int bestGuess(int level) throws CloneNotSupportedException
     {
-        /**
-         * Keeps track of the guess value of the best move and the guess value
-         * of the current move being examined.
+        /*
+          Keeps track of the guess value of the best move and the guess value
+          of the current move being examined.
          */
         int bestGuessValue, currentGuessValue;
 
-        /**
-         * Stores the next move to try.
+        /*
+          Stores the next move to try.
          */
         int tryMove;
 
-        /**
-         * Holds a copy of the current game.
+        /*
+          Holds a copy of the current game.
          */
         TicTacToe tempSituation;
 
-        /**
-         * Holds a copy of the legal moves for this game.
+        /*
+          Holds a copy of the legal moves for this game.
          */
         int[] legalMoves = this.generateLegalMoves();
 
@@ -449,18 +444,17 @@ public class TicTacToe implements Cloneable
      * 50:  computer/player are tied
      * 0:   the player has won
      */
-    public int judge()
+     private int judge()
     {
         switch(result())
         {
             case 0:
+            case 3:
                 return 50;
             case 1:
                 return 0;
             case 2:
                 return 100;
-            case 3:
-                return 50;
         }
 
         // Should never get here...
@@ -479,7 +473,7 @@ public class TicTacToe implements Cloneable
     /**
      * Return the int value of who controls the current turn.
      */
-    public int getWhoseTurn()
+    private int getWhoseTurn()
     {
         return whoseTurn;
     }
@@ -503,7 +497,7 @@ public class TicTacToe implements Cloneable
     /**
      * Sets the value of who gets to go first in this game.
      */
-    public void setFirstTurn(int firstTurn)
+    private void setFirstTurn(int firstTurn)
     {
         this.firstTurn = firstTurn;
     }
