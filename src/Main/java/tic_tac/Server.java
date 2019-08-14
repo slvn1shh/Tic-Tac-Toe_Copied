@@ -1,11 +1,3 @@
-/**
- * Author:  Kevin Richardson <kevin@magically.us>
- * Date:    2011-Dec-9
- * Time:    9:10 PM
- *
- * This class creates a single-threaded server on specified port that can be accessed by
- * one user's GUI client to play a game of TicTacToe through a ServerGame instance.
- */
 
 package Main.java.tic_tac;
 

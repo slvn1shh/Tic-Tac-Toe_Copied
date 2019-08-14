@@ -1,11 +1,3 @@
-/**
- * Author:  Kevin Richardson <kevin@magically.us>
- * Date:    2011-Dec-9
- * Time:    10:00 PM
- *
- * The GUI for the TicTacToe assignment.  This class will create
- * a form allowing the user to interact with the TicTacToe Server.
- */
 
 package Main.java.tic_tac;
 
@@ -292,10 +284,6 @@ public class TicTacToeGUI
         frame = new JFrame("Sinestro Corps War");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 400);
-
-        /**
-         * Define the panels used in this GUI.
-         */
 
         // Panel holding the various buttons representing the tic tac toe grid.
         buttonPanel = new JPanel();

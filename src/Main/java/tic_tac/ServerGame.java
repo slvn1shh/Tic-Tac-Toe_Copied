@@ -1,11 +1,3 @@
-/**
- * Author:  Kevin Richardson <kevin@magically.us>
- * Date:    2011-Dec-9
- * Time:    9:20 PM
- *
- * This class instantiates a TacTacToe game and runs until it is complete.
- * It is used by Server to allow a user to play over the network.
- */
 
 package Main.java.tic_tac;
 

@@ -1,11 +1,3 @@
-/**
- * User:    Kevin Richardson <kevin@magically.us>
- * Date:    2011-Dec-9
- * Time:    9:15 PM
- *
- * The main TicTacToe class, storing game state information and relevant methods.
- * The "AI" in this game will determine the best move at every turn.
- */
 
 package Main.java.tic_tac;
 
